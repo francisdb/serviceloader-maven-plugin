@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<faqs id="FAQ" title="Frequently Asked Questions">
+ <part id="General">
+   <faq id="question">
+     <question>How to use this plugin</question>
+     <answer>
+       <p>
+         Add this to your pom.xml:<br/>
+         <pre>
+         <!--<build>
+			<plugins>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>serviceloader-maven-plugin</artifactId>
+					<configuration>
+					    <services>
+					    	<param>com.foo.OperationFactory</param>
+					    	<param>com.foo..Operation</param>
+					    </services>
+					 </configuration>
+				</plugin>
+			</plugins>
+		</build>-->
+         </pre>
+       </p>
+     </answer>
+   </faq>
+ </part>
+</faqs>
