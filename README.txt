@@ -4,18 +4,18 @@ http://java.sun.com/javase/6/docs/api/java/util/ServiceLoader.html
 
 for example:
 <build>
-<plugins>
-<plugin>
-<groupId>org.codehaus.mojo</groupId>
-<artifactId>serviceloader-maven-plugin</artifactId>
-<configuration>
-<services>
-<param>com.foo.Dictionary</param>
-<param>com.foo.Operation</param>
-</services>
-</configuration>
-</plugin>
-</plugins>
+  <plugins>
+    <plugin>
+      <groupId>org.codehaus.mojo</groupId>
+      <artifactId>serviceloader-maven-plugin</artifactId>
+      <configuration>
+        <services>
+          <param>com.foo.Dictionary</param>
+          <param>com.foo.Operation</param>
+        </services>
+      </configuration>
+    </plugin>
+  </plugins>
 </build>
 
 this will generate these files:
