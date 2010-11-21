@@ -34,8 +34,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 import java.util.Map.Entry;
+import java.util.Stack;
 import java.util.regex.Pattern;
 
 import org.apache.maven.plugin.AbstractMojo;
@@ -224,7 +224,7 @@ public class ServiceloaderMojo
             {
                 Class<?> cls = loader.loadClass( className );
                 int mods = cls.getModifiers();
-                if ( !cls.isAnonymousClass() && !cls.isInterface() && !cls.isEnum() && !cls.isMemberClass()
+                if ( !cls.isAnonymousClass() && !cls.isInterface() && !cls.isEnum()
                     && !Modifier.isAbstract( mods ) && Modifier.isPublic( mods ) )
                 {
                     for ( Class<?> interfaceCls : interfaceClasses )
@@ -262,7 +262,7 @@ public class ServiceloaderMojo
         String[] files = directoryScanner.getIncludedFiles();
         
         for(String file:files){
-            classNames.add( file.substring( 0, file.length() - extension.length()).replace( "/", "." ));
+        	classNames.add(file.substring( 0, file.length() - extension.length()).replace( File.separator, "." ));
         }
 
         return classNames;
@@ -330,11 +330,11 @@ public class ServiceloaderMojo
                 String path = (String) element;
                 if ( path.endsWith( ".jar" ) )
                 {
-                    url = new URL( "jar:file:" + path + "!/" );
+                	url = new URL( "jar:" + new File(path).toURI().toString() + "!/" );
                 }
                 else
                 {
-                    url = new URL( "file:" + path + "/" );
+                	url = new File(path).toURI().toURL();
                 }
                 urls.add( url );
             }
