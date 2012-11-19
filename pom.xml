@@ -39,8 +39,8 @@
 	</organization>
 	<url>https://github.com/francisdb/serviceloader-maven-plugin</url>
 	<scm>
-		<connection>git://github.com/francisdb/serviceloader-maven-plugin.git</connection>
-		<developerConnection>git@github.com:francisdb/serviceloader-maven-plugin.git</developerConnection>
+		<connection>scm:git:git://github.com/francisdb/serviceloader-maven-plugin.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com:francisdb/serviceloader-maven-plugin.git</developerConnection>
 		<url>https://github.com/francisdb/serviceloader-maven-plugin</url>
 	</scm>
 	<prerequisites>
