@@ -19,11 +19,11 @@ for example:
     </build>
 
 this will generate these files:
-META-INF/services/com.foo.Dictionary
-META-INF/services/com.foo.Operation
-by scanning the generated classes and finding all
-non-abstract/non-interface implementations of the service interfaces.
-The plugin itself has no Java 6 dependency
+
+* META-INF/services/com.foo.Dictionary
+* META-INF/services/com.foo.Operation
+
+by scanning the generated classes and finding all non-abstract/non-interface implementations of the service interfaces. The plugin itself has no Java 6 dependency
 
 More info here: 
 http://jira.codehaus.org/browse/MOJO-1272?focusedCommentId=242147#action_242147
