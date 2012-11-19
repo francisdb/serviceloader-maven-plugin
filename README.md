@@ -8,6 +8,7 @@ for example:
         <plugin>
           <groupId>eu.somatik.serviceloader-maven-plugin</groupId>
           <artifactId>serviceloader-maven-plugin</artifactId>
+          <version>1.0.0</version>
           <configuration>
             <services>
               <param>com.foo.Dictionary</param>
