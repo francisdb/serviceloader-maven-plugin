@@ -1,5 +1,5 @@
 This maven plugin generates services files for the ServiceLoader introduced in Java 6 :
-http://java.sun.com/javase/6/docs/api/java/util/ServiceLoader.html
+http://docs.oracle.com/javase/6/docs/api/java/util/ServiceLoader.html
 
 for example:
 
