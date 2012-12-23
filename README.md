@@ -33,5 +33,17 @@ this will generate these files:
 
 by scanning the generated classes and finding all non-abstract/non-interface implementations of the service interfaces. The plugin itself has no Java 6 dependency
 
-More info here: 
+A example project is provided and can be run like this:
+
+    $ mvn2 clean install
+    ...
+    [INFO] Generating service file .../example/target/classes/META-INF/services/eu.somatik.serviceloader.Operation
+    [INFO]   + eu.somatik.serviceloader.SimpleOperation
+    ...
+    
+    $ java -jar target/example-1.0-SNAPSHOT.jar
+    Found service implementation: eu.somatik.serviceloader.SimpleOperation@579a19fd
+    Hello world
+
+The old project path for reference: 
 http://jira.codehaus.org/browse/MOJO-1272?focusedCommentId=242147#action_242147
