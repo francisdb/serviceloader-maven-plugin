@@ -15,6 +15,13 @@ for example:
               <param>com.foo.Operation</param>
             </services>
           </configuration>
+          <executions>
+            <execution>
+              <goals>
+                <goal>generate</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
       </plugins>
     </build>
