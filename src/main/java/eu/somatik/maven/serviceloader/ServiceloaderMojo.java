@@ -36,7 +36,7 @@ import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.DirectoryScanner;
 
 /**
- * Goal that generates the servces files
+ * Goal that generates the services files
  * 
  * @goal generate
  * @phase compile

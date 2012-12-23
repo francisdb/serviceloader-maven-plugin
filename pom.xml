@@ -103,7 +103,10 @@
 						<username>Francis De Brabandere</username>
 					</properties>
 					<excludes>
-						<exclude>**/*.txt</exclude>
+                        <exclude>**/*.txt</exclude>
+                        <exclude>**/*.md</exclude>
+                        <exclude>**/.gitignore</exclude>
+                        <exclude>**/.idea/**</exclude>
 					</excludes>
 					<mapping>
 						<java>SLASHSTAR_STYLE</java>
