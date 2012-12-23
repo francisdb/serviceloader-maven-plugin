@@ -94,8 +94,7 @@ public class ServiceloaderMojo extends AbstractMojo {
 	public void execute() throws MojoExecutionException {
 		URLClassLoader classLoader = new URLClassLoader(generateClassPathUrls());
 		List<Class<?>> interfaceClasses = loadInterfaceClasses(classLoader);
-		Map<String, List<String>> serviceImplementations = findImplementations(
-				classLoader, interfaceClasses);
+		Map<String, List<String>> serviceImplementations = findImplementations(classLoader, interfaceClasses);
 		writeServiceFiles(serviceImplementations);
 	}
 
@@ -110,29 +109,23 @@ public class ServiceloaderMojo extends AbstractMojo {
 			throws MojoExecutionException {
 		// TODO give the user an option to write them to the source folder or
 		// any other folder?
-		File parentFolder = new File(getClassFolder(), "META-INF"
-				+ File.separator + "services");
+		File parentFolder = new File(getClassFolder(), "META-INF" + File.separator + "services");
 		if (!parentFolder.exists()) {
 			parentFolder.mkdirs();
 		}
-		for (Entry<String, List<String>> interfaceClassName : serviceImplementations
-				.entrySet()) {
-			File serviceFile = new File(parentFolder,
-					interfaceClassName.getKey());
-			getLog().info(
-					"Generating service file " + serviceFile.getAbsolutePath());
+		for (Entry<String, List<String>> interfaceClassName : serviceImplementations.entrySet()) {
+			File serviceFile = new File(parentFolder, interfaceClassName.getKey());
+			getLog().info("Generating service file " + serviceFile.getAbsolutePath());
 			FileWriter writer = null;
 			try {
 				writer = new FileWriter(serviceFile);
-				for (String implementationClassName : interfaceClassName
-						.getValue()) {
+				for (String implementationClassName : interfaceClassName.getValue()) {
 					getLog().info("  + " + implementationClassName);
 					writer.write(implementationClassName);
 					writer.write('\n');
 				}
 			} catch (IOException e) {
-				throw new MojoExecutionException("Error creating file "
-						+ serviceFile, e);
+				throw new MojoExecutionException("Error creating file " + serviceFile, e);
 			} finally {
 				if (writer != null) {
 					try {
@@ -149,7 +142,6 @@ public class ServiceloaderMojo extends AbstractMojo {
 	 * Loads all interfaces using the provided ClassLoader
 	 * 
 	 * @param loader
-	 * @param interfaces
 	 * @return thi List of Interface classes
 	 * @throws MojoExecutionException
 	 *             is the interfaces are not interfaces or can not be found on
@@ -160,17 +152,13 @@ public class ServiceloaderMojo extends AbstractMojo {
 		List<Class<?>> interfaceClasses = new ArrayList<Class<?>>();
 		for (String interfaceClassName : getServices()) {
 			try {
-				// Class.forName("oracle.jdbc.driver.OracleDriver", true, ucl);
 				Class<?> interfaceClass = loader.loadClass(interfaceClassName);
 				if (!interfaceClass.isInterface()) {
-					throw new MojoExecutionException("Class "
-							+ interfaceClassName + " is not an interface!");
+					throw new MojoExecutionException("Class " + interfaceClassName + " is not an interface!");
 				}
 				interfaceClasses.add(interfaceClass);
 			} catch (ClassNotFoundException e1) {
-				throw new MojoExecutionException(
-						"Could not load interface class: " + interfaceClassName,
-						e1);
+				throw new MojoExecutionException("Could not load interface class: " + interfaceClassName, e1);
 			}
 		}
 		return interfaceClasses;
@@ -180,7 +168,6 @@ public class ServiceloaderMojo extends AbstractMojo {
 	 * Finds all implementations of interfaces in a folder
 	 * 
 	 * @param loader
-	 * @param classFolder
 	 * @param interfaceClasses
 	 * @return
 	 * @throws MojoExecutionException
@@ -189,8 +176,7 @@ public class ServiceloaderMojo extends AbstractMojo {
 			List<Class<?>> interfaceClasses) throws MojoExecutionException {
 		Map<String, List<String>> serviceImplementations = new HashMap<String, List<String>>();
 		for (String interfaceClassName : getServices()) {
-			serviceImplementations.put(interfaceClassName,
-					new ArrayList<String>());
+			serviceImplementations.put(interfaceClassName, new ArrayList<String>());
 		}
 		getLog().info("Scanning generated classes for implementations...");
 		File classFolder = getClassFolder();
@@ -198,6 +184,9 @@ public class ServiceloaderMojo extends AbstractMojo {
 		// List<String> classNames = listCompiledClassesRegex( classFolder );
 		for (String className : classNames) {
 			try {
+                if(getLog().isDebugEnabled()){
+                    getLog().debug("checking class: " + className);
+                }
 				Class<?> cls = loader.loadClass(className);
 				int mods = cls.getModifiers();
 				if (!cls.isAnonymousClass() && !cls.isInterface()
@@ -205,27 +194,25 @@ public class ServiceloaderMojo extends AbstractMojo {
 						&& Modifier.isPublic(mods)) {
 					for (Class<?> interfaceCls : interfaceClasses) {
 						if (interfaceCls.isAssignableFrom(cls)) {
-							serviceImplementations.get(interfaceCls.getName())
-									.add(className);
+							serviceImplementations.get(interfaceCls.getName()).add(className);
 						}
 					}
 				}
 			} catch (ClassNotFoundException e1) {
 				getLog().error(e1);
-				throw new MojoExecutionException("Could not load class: "
-						+ className, e1);
+				throw new MojoExecutionException("Could not load class: " + className, e1);
 			}
 		}
 		return serviceImplementations;
 	}
 
 	/**
-	 * Walks the classFolder and finds all .class files
+	 * Walks the classFolder and finds all classes
 	 * 
-	 * @param classFolder
-	 * @return the list of available classe names
+	 * @param classFolder the folder to scan for .class files
+	 * @return the list of available class names
 	 */
-	private List<String> listCompiledClasses(File classFolder) {
+	private List<String> listCompiledClasses(final File classFolder) {
 		final String extension = ".class";
 		List<String> classNames = new ArrayList<String>();
 		final DirectoryScanner directoryScanner = new DirectoryScanner();
@@ -234,10 +221,10 @@ public class ServiceloaderMojo extends AbstractMojo {
 		directoryScanner.scan();
 		String[] files = directoryScanner.getIncludedFiles();
 
+        String className;
 		for (String file : files) {
-			classNames.add(file
-					.substring(0, file.length() - extension.length()).replace(
-							File.separator, "."));
+            className = file.substring(0, file.length() - extension.length()).replace(File.separator, ".");
+			classNames.add(className);
 		}
 
 		return classNames;
@@ -257,8 +244,7 @@ public class ServiceloaderMojo extends AbstractMojo {
 		String classFolderPath = classFolder.getAbsolutePath();
 		getLog().info("ClassFolderPath=" + classFolderPath);
 
-		Pattern pat = Pattern.compile(classFolderPath + File.separator
-				+ "(.*).class");
+		Pattern pat = Pattern.compile(classFolderPath + File.separator + "(.*).class");
 		File workDir;
 		String name;
 		while (!todo.isEmpty()) {
@@ -295,8 +281,7 @@ public class ServiceloaderMojo extends AbstractMojo {
 			for (Object element : getCompileClasspath()) {
 				String path = (String) element;
 				if (path.endsWith(".jar")) {
-					url = new URL("jar:" + new File(path).toURI().toString()
-							+ "!/");
+					url = new URL("jar:" + new File(path).toURI().toString() + "!/");
 				} else {
 					url = new File(path).toURI().toURL();
 				}
