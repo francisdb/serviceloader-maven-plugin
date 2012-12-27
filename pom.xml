@@ -39,7 +39,7 @@
 	<url>https://github.com/francisdb/serviceloader-maven-plugin</url>
 	<scm>
 		<connection>scm:git:git://github.com/francisdb/serviceloader-maven-plugin.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com:francisdb/serviceloader-maven-plugin.git</developerConnection>
+		<developerConnection>scm:git:git@github.com:francisdb/serviceloader-maven-plugin.git</developerConnection>
 		<url>https://github.com/francisdb/serviceloader-maven-plugin</url>
 	</scm>
 	<prerequisites>
