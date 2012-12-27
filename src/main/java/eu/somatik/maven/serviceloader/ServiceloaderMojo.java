@@ -212,7 +212,7 @@ public class ServiceloaderMojo extends AbstractMojo {
 	 * @param classFolder the folder to scan for .class files
 	 * @return the list of available class names
 	 */
-	private List<String> listCompiledClasses(final File classFolder) {
+	List<String> listCompiledClasses(final File classFolder) {
 		final String extension = ".class";
 		List<String> classNames = new ArrayList<String>();
 		final DirectoryScanner directoryScanner = new DirectoryScanner();
@@ -234,7 +234,7 @@ public class ServiceloaderMojo extends AbstractMojo {
 	 * Walks the classFolder and finds all .class files
 	 * 
 	 * @param classFolder
-	 * @return the list of available classe names
+	 * @return the list of available class names
 	 */
 	private List<String> listCompiledClassesRegex(File classFolder) {
 		List<String> classNames = new ArrayList<String>();
