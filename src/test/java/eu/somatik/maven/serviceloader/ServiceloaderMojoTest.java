@@ -16,9 +16,15 @@
 package eu.somatik.maven.serviceloader;
 
 
+import org.apache.maven.plugin.MojoExecutionException;
+import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.ReflectionUtils;
 import org.junit.Test;
+import sun.print.resources.serviceui_sv;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -29,10 +35,25 @@ public class ServiceloaderMojoTest {
     @Test
     public void testListCompiledClasses() throws Exception {
         ServiceloaderMojo mojo = new ServiceloaderMojo();
-        List<String> list = mojo.listCompiledClasses(new File("src/test/resources/classes"));
-        assertEquals(3, list.size());
+        List<String> list = mojo.listCompiledClasses(new File("target/test-classes"));
+        assertEquals(5, list.size());
         assertTrue("missing class", list.contains("com.bar.Bar"));
-        assertTrue("missing class", list.contains("com.foo.Foo"));
+        assertTrue("missing class", list.contains("com.foo.AbstractFoo"));
+        assertTrue("missing class", list.contains("com.foo.FooImpl"));
         assertTrue("missing class", list.contains("com.foo.bar.Hello"));
+    }
+
+    @Test
+    public void testMojoWithAbstractClass() throws MojoExecutionException, IllegalAccessException, IOException {
+        ServiceloaderMojo mojo = new ServiceloaderMojo();
+        ReflectionUtils.setVariableValueInObject(mojo, "services", new String[]{"com.foo.AbstractFoo"});
+        ReflectionUtils.setVariableValueInObject(mojo, "compileClasspath", Collections.<String>emptyList());
+        ReflectionUtils.setVariableValueInObject(mojo, "classFolder", new File("target/test-classes"));
+        mojo.execute();
+
+        File serviceFile = new File("target/test-classes/META-INF/services/com.foo.AbstractFoo");
+
+        String serviceFileContents = FileUtils.fileRead(serviceFile);
+        assertEquals("com.foo.FooImpl\n", serviceFileContents);
     }
 }

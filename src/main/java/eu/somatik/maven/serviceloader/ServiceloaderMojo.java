@@ -93,7 +93,7 @@ public class ServiceloaderMojo extends AbstractMojo {
 
 	public void execute() throws MojoExecutionException {
 		URLClassLoader classLoader = new URLClassLoader(generateClassPathUrls());
-		List<Class<?>> interfaceClasses = loadInterfaceClasses(classLoader);
+		List<Class<?>> interfaceClasses = loadServiceClasses(classLoader);
 		Map<String, List<String>> serviceImplementations = findImplementations(classLoader, interfaceClasses);
 		writeServiceFiles(serviceImplementations);
 	}
@@ -147,18 +147,19 @@ public class ServiceloaderMojo extends AbstractMojo {
 	 *             is the interfaces are not interfaces or can not be found on
 	 *             the classpath
 	 */
-	private List<Class<?>> loadInterfaceClasses(ClassLoader loader)
+	private List<Class<?>> loadServiceClasses(ClassLoader loader)
 			throws MojoExecutionException {
 		List<Class<?>> interfaceClasses = new ArrayList<Class<?>>();
-		for (String interfaceClassName : getServices()) {
+		for (String serviceClassName : getServices()) {
 			try {
-				Class<?> interfaceClass = loader.loadClass(interfaceClassName);
-				if (!interfaceClass.isInterface()) {
-					throw new MojoExecutionException("Class " + interfaceClassName + " is not an interface!");
+				Class<?> serviceClass = loader.loadClass(serviceClassName);
+				if (serviceClass.isInterface() || Modifier.isAbstract(serviceClass.getModifiers())) {
+                    interfaceClasses.add(serviceClass);
+                }else{
+					throw new MojoExecutionException("Class " + serviceClassName + " is not an interface or abstract!");
 				}
-				interfaceClasses.add(interfaceClass);
-			} catch (ClassNotFoundException e1) {
-				throw new MojoExecutionException("Could not load interface class: " + interfaceClassName, e1);
+			} catch (ClassNotFoundException ex) {
+				throw new MojoExecutionException("Could not load class: " + serviceClassName, ex);
 			}
 		}
 		return interfaceClasses;
