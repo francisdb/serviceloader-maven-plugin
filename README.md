@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/francisdb/serviceloader-maven-plugin.png?branch=master)](https://travis-ci.org/francisdb/serviceloader-maven-plugin)
+
 This maven plugin generates services files for the ServiceLoader introduced in Java 6 :
 http://docs.oracle.com/javase/6/docs/api/java/util/ServiceLoader.html
 
