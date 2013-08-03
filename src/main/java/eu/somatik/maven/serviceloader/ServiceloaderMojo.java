@@ -214,8 +214,12 @@ public class ServiceloaderMojo extends AbstractMojo {
 	 * @return the list of available class names
 	 */
 	List<String> listCompiledClasses(final File classFolder) {
-		final String extension = ".class";
 		List<String> classNames = new ArrayList<String>();
+		if (!classFolder.exists()) {
+			getLog().info("Class folder does not exist; skipping scan");
+			return classNames;
+		}
+		final String extension = ".class";
 		final DirectoryScanner directoryScanner = new DirectoryScanner();
 		directoryScanner.setBasedir(classFolder);
 		directoryScanner.setIncludes(new String[] { "**" + File.separator + "*" + extension });
