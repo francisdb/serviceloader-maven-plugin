@@ -200,8 +200,9 @@ public class ServiceloaderMojo extends AbstractMojo {
 					}
 				}
 			} catch (ClassNotFoundException e1) {
-				getLog().error(e1);
-				throw new MojoExecutionException("Could not load class: " + className, e1);
+				getLog().warn(e1);
+			} catch (NoClassDefFoundError e2) {
+				getLog().warn(e2);
 			}
 		}
 		return serviceImplementations;
