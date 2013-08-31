@@ -91,7 +91,26 @@ public class ServiceloaderMojo extends AbstractMojo {
 		return compileClasspath;
 	}
 
+	protected boolean skipProject() {
+		String packaging = null;
+		if (project != null) {
+			packaging = project.getPackaging();
+		} else {
+			getLog().warn("Project not set");
+		}
+		if (packaging != null) {
+			if (packaging.equals("pom")) {
+				getLog().info("POM project detected; skipping");
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public void execute() throws MojoExecutionException {
+		if (skipProject()) {
+			return;
+		}
 		URLClassLoader classLoader = new URLClassLoader(generateClassPathUrls());
 		List<Class<?>> interfaceClasses = loadServiceClasses(classLoader);
 		Map<String, List<String>> serviceImplementations = findImplementations(classLoader, interfaceClasses);
