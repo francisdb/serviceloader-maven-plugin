@@ -23,8 +23,6 @@ import org.junit.Test;
 import org.sonatype.plexus.build.incremental.BuildContext;
 import org.sonatype.plexus.build.incremental.DefaultBuildContext;
 
-import sun.print.resources.serviceui_sv;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
