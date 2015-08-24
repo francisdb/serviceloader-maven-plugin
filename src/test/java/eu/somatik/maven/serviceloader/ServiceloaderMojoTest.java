@@ -20,6 +20,9 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.ReflectionUtils;
 import org.junit.Test;
+import org.sonatype.plexus.build.incremental.BuildContext;
+import org.sonatype.plexus.build.incremental.DefaultBuildContext;
+
 import sun.print.resources.serviceui_sv;
 
 import java.io.File;
@@ -34,7 +37,9 @@ public class ServiceloaderMojoTest {
 
     @Test
     public void testListCompiledClasses() throws Exception {
+	BuildContext buildContext = new DefaultBuildContext();
         ServiceloaderMojo mojo = new ServiceloaderMojo();
+        mojo.setBuildContext(buildContext);
         List<String> list = mojo.listCompiledClasses(new File("target/test-classes"));
         assertEquals(5, list.size());
         assertTrue("missing class", list.contains("com.bar.Bar"));
@@ -45,7 +50,9 @@ public class ServiceloaderMojoTest {
 
     @Test
     public void testMojoWithAbstractClass() throws MojoExecutionException, IllegalAccessException, IOException {
+	BuildContext buildContext = new DefaultBuildContext();
         ServiceloaderMojo mojo = new ServiceloaderMojo();
+        mojo.setBuildContext(buildContext);
         ReflectionUtils.setVariableValueInObject(mojo, "services", new String[]{"com.foo.AbstractFoo"});
         ReflectionUtils.setVariableValueInObject(mojo, "compileClasspath", Collections.<String>emptyList());
         ReflectionUtils.setVariableValueInObject(mojo, "classFolder", new File("target/test-classes"));

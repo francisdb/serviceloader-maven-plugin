@@ -30,49 +30,54 @@ import java.util.Map.Entry;
 import java.util.Stack;
 import java.util.regex.Pattern;
 
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.DirectoryScanner;
+import org.sonatype.plexus.build.incremental.BuildContext;
 
 /**
  * Goal that generates the services files
  * 
- * @goal generate
- * @phase compile
- * @requiresDependencyResolution compile
  */
+@Mojo(
+	name = "generate",
+	defaultPhase = LifecyclePhase.COMPILE,
+	requiresDependencyResolution = ResolutionScope.COMPILE,
+	requiresProject = true)
 public class ServiceloaderMojo extends AbstractMojo {
+
+
+	@Component
+	private BuildContext buildContext;
 
 	/**
 	 * <i>Maven Internal</i>: Project to interact with.
 	 * 
-	 * @parameter expression="${project}"
-	 * @required
-	 * @readonly
 	 */
+	@Parameter(property="project", required = true, readonly = true)
 	protected MavenProject project;
 
 	/**
-	 * @parameter expression="${project.build.directory}/classes"
-	 * @required
-	 * @readonly
 	 */
+	@Parameter(defaultValue ="${project.build.directory}/classes", required = true, readonly = true)
 	private File classFolder;
 
 	/**
-	 * @parameter expression="${project.compileClasspathElements}"
-	 * @required
-	 * @readonly
 	 */
+	@Parameter(defaultValue ="${project.compileClasspathElements}", required = true, readonly = true)
 	private List<String> compileClasspath;
 
 	/**
 	 * The service interfaces to generate service files for
 	 * 
-	 * @parameter
-	 * @required
 	 */
+	@Parameter
 	private String[] services;
 
 	public MavenProject getProject() {
@@ -90,7 +95,16 @@ public class ServiceloaderMojo extends AbstractMojo {
 	public List<String> getCompileClasspath() {
 		return compileClasspath;
 	}
+	
+	public void setBuildContext(BuildContext buildContext) {
+		this.buildContext = buildContext;
+	}
 
+	 /**
+	  * The main entry point for this Mojo.
+	  *
+	  * @throws MojoExecutionException 
+	 */
 	public void execute() throws MojoExecutionException {
 		URLClassLoader classLoader = new URLClassLoader(generateClassPathUrls());
 		List<Class<?>> interfaceClasses = loadServiceClasses(classLoader);
@@ -124,6 +138,7 @@ public class ServiceloaderMojo extends AbstractMojo {
 					writer.write(implementationClassName);
 					writer.write('\n');
 				}
+				buildContext.refresh(serviceFile);
 			} catch (IOException e) {
 				throw new MojoExecutionException("Error creating file " + serviceFile, e);
 			} finally {
