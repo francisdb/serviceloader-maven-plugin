@@ -4,29 +4,30 @@ This maven plugin generates services files for the ServiceLoader introduced in J
 http://docs.oracle.com/javase/6/docs/api/java/util/ServiceLoader.html
 
 for example:
-
-    <build>
-      <plugins>
-        <plugin>
-          <groupId>eu.somatik.serviceloader-maven-plugin</groupId>
-          <artifactId>serviceloader-maven-plugin</artifactId>
-          <version>1.0.5</version>
-          <configuration>
-            <services>
-              <param>com.foo.Dictionary</param>
-              <param>com.foo.Operation</param>
-            </services>
-          </configuration>
-          <executions>
-            <execution>
-              <goals>
-                <goal>generate</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-      </plugins>
-    </build>
+```xml
+<build>
+  <plugins>
+    <plugin>
+      <groupId>eu.somatik.serviceloader-maven-plugin</groupId>
+      <artifactId>serviceloader-maven-plugin</artifactId>
+      <version>1.0.5</version>
+      <configuration>
+        <services>
+          <param>com.foo.Dictionary</param>
+          <param>com.foo.Operation</param>
+        </services>
+      </configuration>
+      <executions>
+        <execution>
+          <goals>
+            <goal>generate</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
+  </plugins>
+</build>
+```
 
 this will generate these files:
 
