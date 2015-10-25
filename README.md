@@ -48,9 +48,6 @@ A example project is provided and can be run like this:
     Found service implementation: eu.somatik.serviceloader.SimpleOperation@579a19fd
     Hello world
 
-The old project path for reference: 
-http://jira.codehaus.org/browse/MOJO-1272?focusedCommentId=242147#action_242147
-
 # Release
 
 see http://central.sonatype.org/pages/apache-maven.html#performing-a-release-deployment-with-the-maven-release-plugin
