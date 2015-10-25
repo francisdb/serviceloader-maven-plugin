@@ -106,10 +106,14 @@ public class ServiceloaderMojo extends AbstractMojo {
      * @throws MojoExecutionException
      */
     public void execute() throws MojoExecutionException {
-        URLClassLoader classLoader = new URLClassLoader(generateClassPathUrls());
-        List<Class<?>> interfaceClasses = loadServiceClasses(classLoader);
-        Map<String, List<String>> serviceImplementations = findImplementations(classLoader, interfaceClasses);
-        writeServiceFiles(serviceImplementations);
+        if (skipProject()) {
+            getLog().info("POM project detected; skipping");
+        }else {
+            URLClassLoader classLoader = new URLClassLoader(generateClassPathUrls());
+            List<Class<?>> interfaceClasses = loadServiceClasses(classLoader);
+            Map<String, List<String>> serviceImplementations = findImplementations(classLoader, interfaceClasses);
+            writeServiceFiles(serviceImplementations);
+        }
     }
 
     /**
@@ -308,6 +312,16 @@ public class ServiceloaderMojo extends AbstractMojo {
             throw new MojoExecutionException("Could not set up classpath", e);
         }
         return urls.toArray(new URL[urls.size()]);
+    }
+
+    private boolean skipProject() {
+        String packaging = null;
+        if (project != null) {
+            packaging = project.getPackaging();
+        } else {
+            getLog().warn("Project not set");
+        }
+        return packaging != null && packaging.equals("pom");
     }
 
 }
