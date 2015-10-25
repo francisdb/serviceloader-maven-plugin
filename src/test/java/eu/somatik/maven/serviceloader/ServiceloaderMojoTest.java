@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Francis De Brabandere <info@somatik.eu>
+ * Copyright (C) 2015 Francis De Brabandere <info@somatik.eu>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,13 +39,17 @@ public class ServiceloaderMojoTest {
         ServiceloaderMojo mojo = new ServiceloaderMojo();
         mojo.setBuildContext(buildContext);
         List<String> list = mojo.listCompiledClasses(new File("target/test-classes"));
-        assertEquals(5, list.size());
+        assertEquals(7, list.size());
         assertTrue("missing class", list.contains("com.bar.Bar"));
         assertTrue("missing class", list.contains("com.foo.AbstractFoo"));
         assertTrue("missing class", list.contains("com.foo.FooImpl"));
         assertTrue("missing class", list.contains("com.foo.bar.Hello"));
+        assertTrue("missing class", list.contains("com.baz.BazExt"));
     }
 
+    /**
+     * See https://github.com/francisdb/serviceloader-maven-plugin/issues/4
+     */
     @Test
     public void testMojoWithAbstractClass() throws MojoExecutionException, IllegalAccessException, IOException {
 	BuildContext buildContext = new DefaultBuildContext();
@@ -60,5 +64,25 @@ public class ServiceloaderMojoTest {
 
         String serviceFileContents = FileUtils.fileRead(serviceFile);
         assertEquals("com.foo.FooImpl\n", serviceFileContents);
+    }
+
+    /**
+     * See https://github.com/francisdb/serviceloader-maven-plugin/issues/11
+     */
+    @Test
+    public void testMojoWithConcreteClass() throws MojoExecutionException, IllegalAccessException, IOException {
+        BuildContext buildContext = new DefaultBuildContext();
+        ServiceloaderMojo mojo = new ServiceloaderMojo();
+        mojo.setBuildContext(buildContext);
+        ReflectionUtils.setVariableValueInObject(mojo, "services", new String[]{"com.baz.Baz"});
+        ReflectionUtils.setVariableValueInObject(mojo, "compileClasspath", Collections.<String>emptyList());
+        ReflectionUtils.setVariableValueInObject(mojo, "classFolder", new File("target/test-classes"));
+        mojo.execute();
+
+        File serviceFile = new File("target/test-classes/META-INF/services/com.baz.Baz");
+
+        String serviceFileContents = FileUtils.fileRead(serviceFile);
+        System.err.println(serviceFileContents);
+        assertEquals("com.baz.BazExt\n", serviceFileContents);
     }
 }

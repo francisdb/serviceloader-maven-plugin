@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.foo;
+package com.baz;
 
-public abstract class AbstractFoo {
-    abstract void doSomething();
+public class Baz {
 }
