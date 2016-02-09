@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Francis De Brabandere <info@somatik.eu>
+ * Copyright (C) 2016 Francis De Brabandere <info@somatik.eu>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,12 +39,48 @@ public class ServiceloaderMojoTest {
         ServiceloaderMojo mojo = new ServiceloaderMojo();
         mojo.setBuildContext(buildContext);
         List<String> list = mojo.listCompiledClasses(new File("target/test-classes"));
-        assertEquals(7, list.size());
+        assertEquals(9, list.size());
         assertTrue("missing class", list.contains("com.bar.Bar"));
         assertTrue("missing class", list.contains("com.foo.AbstractFoo"));
         assertTrue("missing class", list.contains("com.foo.FooImpl"));
+        assertTrue("missing class", list.contains("com.foo.FooImpl2"));
         assertTrue("missing class", list.contains("com.foo.bar.Hello"));
         assertTrue("missing class", list.contains("com.baz.BazExt"));
+        assertTrue("missing class", list.contains("com.baz.BazExt2"));
+    }
+
+    @Test
+    public void testMojoWithExcludes() throws MojoExecutionException, IllegalAccessException, IOException {
+        BuildContext buildContext = new DefaultBuildContext();
+        ServiceloaderMojo mojo = new ServiceloaderMojo();
+        mojo.setBuildContext(buildContext);
+        ReflectionUtils.setVariableValueInObject(mojo, "services", new String[]{"com.foo.AbstractFoo"});
+        ReflectionUtils.setVariableValueInObject(mojo, "compileClasspath", Collections.<String>emptyList());
+        ReflectionUtils.setVariableValueInObject(mojo, "classFolder", new File("target/test-classes"));
+        ReflectionUtils.setVariableValueInObject(mojo, "excludes", new String[]{"*2*"});
+        mojo.execute();
+
+        File serviceFile = new File("target/test-classes/META-INF/services/com.foo.AbstractFoo");
+
+        String serviceFileContents = FileUtils.fileRead(serviceFile);
+        assertEquals("com.foo.FooImpl\n", serviceFileContents);
+    }
+
+    @Test
+    public void testMojoWithIncludes() throws MojoExecutionException, IllegalAccessException, IOException {
+        BuildContext buildContext = new DefaultBuildContext();
+        ServiceloaderMojo mojo = new ServiceloaderMojo();
+        mojo.setBuildContext(buildContext);
+        ReflectionUtils.setVariableValueInObject(mojo, "services", new String[]{"com.foo.AbstractFoo"});
+        ReflectionUtils.setVariableValueInObject(mojo, "compileClasspath", Collections.<String>emptyList());
+        ReflectionUtils.setVariableValueInObject(mojo, "classFolder", new File("target/test-classes"));
+        ReflectionUtils.setVariableValueInObject(mojo, "includes", new String[]{"*2"});
+        mojo.execute();
+
+        File serviceFile = new File("target/test-classes/META-INF/services/com.foo.AbstractFoo");
+
+        String serviceFileContents = FileUtils.fileRead(serviceFile);
+        assertEquals("com.foo.FooImpl2\n", serviceFileContents);
     }
 
     /**
@@ -63,7 +99,7 @@ public class ServiceloaderMojoTest {
         File serviceFile = new File("target/test-classes/META-INF/services/com.foo.AbstractFoo");
 
         String serviceFileContents = FileUtils.fileRead(serviceFile);
-        assertEquals("com.foo.FooImpl\n", serviceFileContents);
+        assertEquals("com.foo.FooImpl\ncom.foo.FooImpl2\n", serviceFileContents);
     }
 
     /**
@@ -83,6 +119,6 @@ public class ServiceloaderMojoTest {
 
         String serviceFileContents = FileUtils.fileRead(serviceFile);
         System.err.println(serviceFileContents);
-        assertEquals("com.baz.BazExt\n", serviceFileContents);
+        assertEquals("com.baz.BazExt\ncom.baz.BazExt2\n", serviceFileContents);
     }
 }
