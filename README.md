@@ -37,9 +37,42 @@ this will generate these files:
 
 by scanning the generated classes and finding all non-abstract/non-interface implementations of the service interfaces. The plugin itself has no Java 6 dependency
 
+Additionally it is possible to filter implementation classes via includes and excludes section in the configuration. The class name notation is the same as for the services section.
+
+for example:
+```xml
+<build>
+  <plugins>
+    <plugin>
+      <groupId>eu.somatik.serviceloader-maven-plugin</groupId>
+      <artifactId>serviceloader-maven-plugin</artifactId>
+      <version>1.0.6</version>
+      <configuration>
+        <services>
+          <param>com.foo.Dictionary</param>
+          <param>com.foo.Operation</param>
+        </services>
+        <includes>
+          <include>*.RightClass*</include>
+        </includes>
+      </configuration>
+      <executions>
+        <execution>
+          <goals>
+            <goal>generate</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
+  </plugins>
+</build>
+```
+
+This should add only implementation classes that begin with RightClass*.
+
 A example project is provided and can be run like this:
 
-    $ mvn2 clean install
+    $ mvn clean install
     ...
     [INFO] Generating service file .../example/target/classes/META-INF/services/eu.somatik.serviceloader.Operation
     [INFO]   + eu.somatik.serviceloader.SimpleOperation
