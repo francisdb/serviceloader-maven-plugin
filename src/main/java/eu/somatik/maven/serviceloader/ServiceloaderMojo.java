@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Francis De Brabandere <info@somatik.eu>
+ * Copyright (C) 2016 Francis De Brabandere <info@somatik.eu>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,20 +25,23 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.Stack;
 import java.util.regex.Pattern;
 
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
-import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.DirectoryScanner;
+import org.codehaus.plexus.util.SelectorUtils;
 import org.sonatype.plexus.build.incremental.BuildContext;
 
 /**
@@ -79,6 +82,12 @@ public class ServiceloaderMojo extends AbstractMojo {
      */
     @Parameter
     private String[] services;
+    
+    @Parameter
+    private String[] includes;
+    
+    @Parameter
+    private String[] excludes;
 
     public MavenProject getProject() {
         return project;
@@ -210,7 +219,19 @@ public class ServiceloaderMojo extends AbstractMojo {
                         && Modifier.isPublic(mods)) {
                     for (Class<?> interfaceCls : interfaceClasses) {
                         if (!interfaceCls.equals(cls) && interfaceCls.isAssignableFrom(cls)) {
-                            serviceImplementations.get(interfaceCls.getName()).add(className);
+                            
+                            // if the includes section isn't empty, we need to respect the choice and only include the items that are shown there.
+                            if (includes == null || includes.length == 0) {
+                                serviceImplementations.get(interfaceCls.getName()).add(className);
+                            } else {
+                                for ( String include : includes )
+                                {
+                                    if(SelectorUtils.match(include, className)) {
+                                        serviceImplementations.get(interfaceCls.getName()).add(className);
+                                    }
+                                }
+                            }
+                            
                         }
                     }
                 }
@@ -218,6 +239,27 @@ public class ServiceloaderMojo extends AbstractMojo {
                 getLog().warn(e1);
             } catch (NoClassDefFoundError e2) {
                 getLog().warn(e2);
+            }
+            
+        }
+        
+        // in the next iteration we start to process with the excludes
+        if (excludes != null && excludes.length != 0) {
+            Set<Entry<String,List<String>>> entrySet = serviceImplementations.entrySet();
+            for ( Entry<String, List<String>> entry : entrySet )
+            {
+                classNames = entry.getValue();
+                ListIterator<String> classNamesIter = classNames.listIterator();
+                
+                while ( classNamesIter.hasNext())
+                {
+                    for ( String exclude : excludes )
+                    {
+                        if(SelectorUtils.match(exclude, classNamesIter.next())) {
+                          classNamesIter.remove();
+                        }
+                    }
+                }
             }
         }
         return serviceImplementations;
