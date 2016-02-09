@@ -4,6 +4,8 @@
 This maven plugin generates services files for the ServiceLoader introduced in Java 6 :
 http://docs.oracle.com/javase/6/docs/api/java/util/ServiceLoader.html
 
+# Use
+
 for example:
 ```xml
 <build>
@@ -37,6 +39,8 @@ this will generate these files:
 
 by scanning the generated classes and finding all non-abstract/non-interface implementations of the service interfaces. The plugin itself has no Java 6 dependency
 
+# Excludes / includes
+
 Additionally it is possible to filter implementation classes via includes and excludes section in the configuration. The class name notation is the same as for the services section.
 
 for example:
@@ -69,6 +73,8 @@ for example:
 ```
 
 This should add only implementation classes that begin with RightClass*.
+
+# Example
 
 A example project is provided and can be run like this:
 
