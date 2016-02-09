@@ -16,6 +16,7 @@
 package eu.somatik.maven.serviceloader;
 
 
+import com.google.common.collect.Sets;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.ReflectionUtils;
@@ -26,7 +27,9 @@ import org.sonatype.plexus.build.incremental.DefaultBuildContext;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -99,7 +102,8 @@ public class ServiceloaderMojoTest {
         File serviceFile = new File("target/test-classes/META-INF/services/com.foo.AbstractFoo");
 
         String serviceFileContents = FileUtils.fileRead(serviceFile);
-        assertEquals("com.foo.FooImpl\ncom.foo.FooImpl2\n", serviceFileContents);
+        Set<String> classNames = Sets.newHashSet(serviceFileContents.trim().split("\n"));
+        assertEquals(Sets.newHashSet("com.foo.FooImpl", "com.foo.FooImpl2"), classNames);
     }
 
     /**
@@ -118,7 +122,7 @@ public class ServiceloaderMojoTest {
         File serviceFile = new File("target/test-classes/META-INF/services/com.baz.Baz");
 
         String serviceFileContents = FileUtils.fileRead(serviceFile);
-        System.err.println(serviceFileContents);
-        assertEquals("com.baz.BazExt\ncom.baz.BazExt2\n", serviceFileContents);
+        Set<String> classNames = Sets.newHashSet(serviceFileContents.trim().split("\n"));
+        assertEquals(Sets.newHashSet("com.baz.BazExt", "com.baz.BazExt2"), classNames);
     }
 }
