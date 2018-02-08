@@ -253,10 +253,12 @@ public class ServiceloaderMojo extends AbstractMojo {
                 
                 while ( classNamesIter.hasNext())
                 {
+                    String className = classNamesIter.next();
                     for ( String exclude : excludes )
                     {
-                        if(SelectorUtils.match(exclude, classNamesIter.next())) {
+                        if(SelectorUtils.match(exclude, className)) {
                           classNamesIter.remove();
+                          break;
                         }
                     }
                 }
