@@ -2,7 +2,7 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/eu.somatik.serviceloader-maven-plugin/serviceloader-maven-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/eu.somatik.serviceloader-maven-plugin/serviceloader-maven-plugin)
 
 This maven plugin generates services files for the ServiceLoader introduced in Java 6 :
-http://docs.oracle.com/javase/6/docs/api/java/util/ServiceLoader.html
+https://docs.oracle.com/javase/9/docs/api/java/util/ServiceLoader.html
 
 # Use
 
