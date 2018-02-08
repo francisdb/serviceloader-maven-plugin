@@ -13,7 +13,7 @@ for example:
     <plugin>
       <groupId>eu.somatik.serviceloader-maven-plugin</groupId>
       <artifactId>serviceloader-maven-plugin</artifactId>
-      <version>1.0.7</version>
+      <version>1.1.0</version>
       <configuration>
         <services>
           <param>com.foo.Dictionary</param>
@@ -50,7 +50,7 @@ for example:
     <plugin>
       <groupId>eu.somatik.serviceloader-maven-plugin</groupId>
       <artifactId>serviceloader-maven-plugin</artifactId>
-      <version>1.0.7</version>
+      <version>1.1.0</version>
       <configuration>
         <services>
           <param>com.foo.Dictionary</param>
