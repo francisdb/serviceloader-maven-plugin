@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class ServiceloaderMojoTest {
@@ -124,5 +125,32 @@ public class ServiceloaderMojoTest {
         String serviceFileContents = FileUtils.fileRead(serviceFile);
         Set<String> classNames = Sets.newHashSet(serviceFileContents.trim().split("\n"));
         assertEquals(Sets.newHashSet("com.baz.BazExt", "com.baz.BazExt2"), classNames);
+    }
+
+    @Test
+    public void testNotFailOnMissingClass() throws MojoExecutionException, IllegalAccessException, IOException {
+        BuildContext buildContext = new DefaultBuildContext();
+        ServiceloaderMojo mojo = new ServiceloaderMojo();
+        mojo.setBuildContext(buildContext);
+        ReflectionUtils.setVariableValueInObject(mojo, "services", new String[] { "com.baz.MissingService" });
+        ReflectionUtils.setVariableValueInObject(mojo, "compileClasspath", Collections.<String>emptyList());
+        ReflectionUtils.setVariableValueInObject(mojo, "classFolder", new File("target/test-classes"));
+        ReflectionUtils.setVariableValueInObject(mojo, "failOnMissingServiceClass", false);
+        mojo.execute();
+
+        File serviceFile = new File("target/test-classes/META-INF/services/com.baz.MissingService");
+        assertFalse(serviceFile.exists());
+    }
+
+    @Test(expected = MojoExecutionException.class)
+    public void testFailOnMissingClass() throws MojoExecutionException, IllegalAccessException, IOException {
+        BuildContext buildContext = new DefaultBuildContext();
+        ServiceloaderMojo mojo = new ServiceloaderMojo();
+        mojo.setBuildContext(buildContext);
+        ReflectionUtils.setVariableValueInObject(mojo, "services", new String[] { "com.baz.MissingService" });
+        ReflectionUtils.setVariableValueInObject(mojo, "compileClasspath", Collections.<String>emptyList());
+        ReflectionUtils.setVariableValueInObject(mojo, "classFolder", new File("target/test-classes"));
+        ReflectionUtils.setVariableValueInObject(mojo, "failOnMissingServiceClass", true);
+        mojo.execute();
     }
 }

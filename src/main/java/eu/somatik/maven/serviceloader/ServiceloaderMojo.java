@@ -88,6 +88,9 @@ public class ServiceloaderMojo extends AbstractMojo {
     
     @Parameter
     private String[] excludes;
+    
+    @Parameter(defaultValue ="true")
+    private boolean failOnMissingServiceClass;
 
     public MavenProject getProject() {
         return project;
@@ -183,7 +186,11 @@ public class ServiceloaderMojo extends AbstractMojo {
                 Class<?> serviceClass = loader.loadClass(serviceClassName);
                 serviceClasses.add(serviceClass);
             } catch (ClassNotFoundException ex) {
-                throw new MojoExecutionException("Could not load class: " + serviceClassName, ex);
+                if (failOnMissingServiceClass) {
+                    throw new MojoExecutionException("Could not load class: " + serviceClassName, ex);
+                } else {
+                    getLog().info("Skipping missing service class: " + serviceClassName);
+                }
             }
         }
         return serviceClasses;
@@ -200,8 +207,8 @@ public class ServiceloaderMojo extends AbstractMojo {
     private Map<String, List<String>> findImplementations(ClassLoader loader,
                                                           List<Class<?>> interfaceClasses) throws MojoExecutionException {
         Map<String, List<String>> serviceImplementations = new HashMap<String, List<String>>();
-        for (String interfaceClassName : getServices()) {
-            serviceImplementations.put(interfaceClassName, new ArrayList<String>());
+        for (Class<?> interfaceClass: interfaceClasses) {
+            serviceImplementations.put(interfaceClass.getName(), new ArrayList<String>());
         }
         getLog().info("Scanning generated classes for implementations...");
         File classFolder = getClassFolder();
