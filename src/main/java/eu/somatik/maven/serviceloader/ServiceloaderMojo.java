@@ -68,7 +68,7 @@ public class ServiceloaderMojo extends AbstractMojo {
 
     /**
      */
-    @Parameter(defaultValue ="${project.build.outputDirectory}", required = true, readonly = true)
+    @Parameter(defaultValue ="${project.build.directory}/classes", required = true, readonly = true)
     private File classFolder;
 
     /**
@@ -77,23 +77,18 @@ public class ServiceloaderMojo extends AbstractMojo {
     private List<String> compileClasspath;
 
     /**
-     */
-    @Parameter(defaultValue ="${project.build.outputDirectory}/META-INF/services", required = true)
-    private File outputDirectory;
-
-    /**
      * The service interfaces to generate service files for
      *
      */
     @Parameter
     private String[] services;
-
+    
     @Parameter
     private String[] includes;
-
+    
     @Parameter
     private String[] excludes;
-
+    
     @Parameter(defaultValue ="true")
     private boolean failOnMissingServiceClass;
 
@@ -113,10 +108,6 @@ public class ServiceloaderMojo extends AbstractMojo {
         return compileClasspath;
     }
 
-    private File getOutputDirectory() {
-        return outputDirectory;
-    }
-
     public void setBuildContext(BuildContext buildContext) {
         this.buildContext = buildContext;
     }
@@ -126,7 +117,6 @@ public class ServiceloaderMojo extends AbstractMojo {
      *
      * @throws MojoExecutionException
      */
-    @Override
     public void execute() throws MojoExecutionException {
         if (skipProject()) {
             getLog().info("POM project detected; skipping");
@@ -146,9 +136,10 @@ public class ServiceloaderMojo extends AbstractMojo {
      */
     private void writeServiceFiles(
             Map<String, List<String>> serviceImplementations)
-                    throws MojoExecutionException {
-
-        File parentFolder = getOutputDirectory();
+            throws MojoExecutionException {
+        // TODO give the user an option to write them to the source folder or
+        // any other folder?
+        File parentFolder = new File(getClassFolder(), "META-INF" + File.separator + "services");
         if (!parentFolder.exists()) {
             parentFolder.mkdirs();
         }
@@ -214,7 +205,7 @@ public class ServiceloaderMojo extends AbstractMojo {
      * @throws MojoExecutionException
      */
     private Map<String, List<String>> findImplementations(ClassLoader loader,
-            List<Class<?>> interfaceClasses) throws MojoExecutionException {
+                                                          List<Class<?>> interfaceClasses) throws MojoExecutionException {
         Map<String, List<String>> serviceImplementations = new HashMap<String, List<String>>();
         for (Class<?> interfaceClass: interfaceClasses) {
             serviceImplementations.put(interfaceClass.getName(), new ArrayList<String>());
@@ -235,7 +226,7 @@ public class ServiceloaderMojo extends AbstractMojo {
                         && Modifier.isPublic(mods)) {
                     for (Class<?> interfaceCls : interfaceClasses) {
                         if (!interfaceCls.equals(cls) && interfaceCls.isAssignableFrom(cls)) {
-
+                            
                             // if the includes section isn't empty, we need to respect the choice and only include the items that are shown there.
                             if (includes == null || includes.length == 0) {
                                 serviceImplementations.get(interfaceCls.getName()).add(className);
@@ -247,7 +238,7 @@ public class ServiceloaderMojo extends AbstractMojo {
                                     }
                                 }
                             }
-
+                            
                         }
                     }
                 }
@@ -256,9 +247,9 @@ public class ServiceloaderMojo extends AbstractMojo {
             } catch (NoClassDefFoundError e2) {
                 getLog().warn(e2);
             }
-
+            
         }
-
+        
         // in the next iteration we start to process with the excludes
         if (excludes != null && excludes.length != 0) {
             Set<Entry<String,List<String>>> entrySet = serviceImplementations.entrySet();
@@ -266,15 +257,15 @@ public class ServiceloaderMojo extends AbstractMojo {
             {
                 classNames = entry.getValue();
                 ListIterator<String> classNamesIter = classNames.listIterator();
-
+                
                 while ( classNamesIter.hasNext())
                 {
                     String className = classNamesIter.next();
                     for ( String exclude : excludes )
                     {
                         if(SelectorUtils.match(exclude, className)) {
-                            classNamesIter.remove();
-                            break;
+                          classNamesIter.remove();
+                          break;
                         }
                     }
                 }
