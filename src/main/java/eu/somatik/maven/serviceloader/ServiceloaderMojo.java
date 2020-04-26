@@ -68,13 +68,18 @@ public class ServiceloaderMojo extends AbstractMojo {
 
     /**
      */
-    @Parameter(defaultValue ="${project.build.directory}/classes", required = true, readonly = true)
+    @Parameter(defaultValue ="${project.build.outputDirectory}", required = true, readonly = true)
     private File classFolder;
 
     /**
      */
     @Parameter(defaultValue ="${project.compileClasspathElements}", required = true, readonly = true)
     private List<String> compileClasspath;
+
+    /**
+     */
+    @Parameter(defaultValue ="${project.build.outputDirectory}/META-INF/services", required = true)
+    private File outputDirectory;
 
     /**
      * The service interfaces to generate service files for
@@ -108,6 +113,10 @@ public class ServiceloaderMojo extends AbstractMojo {
         return compileClasspath;
     }
 
+    private File getOutputDirectory() {
+        return outputDirectory;
+    }
+
     public void setBuildContext(BuildContext buildContext) {
         this.buildContext = buildContext;
     }
@@ -137,9 +146,8 @@ public class ServiceloaderMojo extends AbstractMojo {
     private void writeServiceFiles(
             Map<String, List<String>> serviceImplementations)
             throws MojoExecutionException {
-        // TODO give the user an option to write them to the source folder or
-        // any other folder?
-        File parentFolder = new File(getClassFolder(), "META-INF" + File.separator + "services");
+
+        File parentFolder = getOutputDirectory();
         if (!parentFolder.exists()) {
             parentFolder.mkdirs();
         }

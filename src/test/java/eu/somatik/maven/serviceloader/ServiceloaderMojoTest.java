@@ -61,6 +61,7 @@ public class ServiceloaderMojoTest {
         ReflectionUtils.setVariableValueInObject(mojo, "services", new String[]{"com.foo.AbstractFoo"});
         ReflectionUtils.setVariableValueInObject(mojo, "compileClasspath", Collections.<String>emptyList());
         ReflectionUtils.setVariableValueInObject(mojo, "classFolder", new File("target/test-classes"));
+        ReflectionUtils.setVariableValueInObject(mojo, "outputDirectory", new File("target/test-classes/META-INF/services"));
         ReflectionUtils.setVariableValueInObject(mojo, "excludes", new String[]{"*2*"});
         mojo.execute();
 
@@ -78,6 +79,7 @@ public class ServiceloaderMojoTest {
         ReflectionUtils.setVariableValueInObject(mojo, "services", new String[]{"com.foo.AbstractFoo"});
         ReflectionUtils.setVariableValueInObject(mojo, "compileClasspath", Collections.<String>emptyList());
         ReflectionUtils.setVariableValueInObject(mojo, "classFolder", new File("target/test-classes"));
+        ReflectionUtils.setVariableValueInObject(mojo, "outputDirectory", new File("target/test-classes/META-INF/services"));
         ReflectionUtils.setVariableValueInObject(mojo, "includes", new String[]{"*2"});
         mojo.execute();
 
@@ -98,6 +100,7 @@ public class ServiceloaderMojoTest {
         ReflectionUtils.setVariableValueInObject(mojo, "services", new String[]{"com.foo.AbstractFoo"});
         ReflectionUtils.setVariableValueInObject(mojo, "compileClasspath", Collections.<String>emptyList());
         ReflectionUtils.setVariableValueInObject(mojo, "classFolder", new File("target/test-classes"));
+        ReflectionUtils.setVariableValueInObject(mojo, "outputDirectory", new File("target/test-classes/META-INF/services"));
         mojo.execute();
 
         File serviceFile = new File("target/test-classes/META-INF/services/com.foo.AbstractFoo");
@@ -118,6 +121,7 @@ public class ServiceloaderMojoTest {
         ReflectionUtils.setVariableValueInObject(mojo, "services", new String[]{"com.baz.Baz"});
         ReflectionUtils.setVariableValueInObject(mojo, "compileClasspath", Collections.<String>emptyList());
         ReflectionUtils.setVariableValueInObject(mojo, "classFolder", new File("target/test-classes"));
+        ReflectionUtils.setVariableValueInObject(mojo, "outputDirectory", new File("target/test-classes/META-INF/services"));
         mojo.execute();
 
         File serviceFile = new File("target/test-classes/META-INF/services/com.baz.Baz");
@@ -135,6 +139,7 @@ public class ServiceloaderMojoTest {
         ReflectionUtils.setVariableValueInObject(mojo, "services", new String[] { "com.baz.MissingService" });
         ReflectionUtils.setVariableValueInObject(mojo, "compileClasspath", Collections.<String>emptyList());
         ReflectionUtils.setVariableValueInObject(mojo, "classFolder", new File("target/test-classes"));
+        ReflectionUtils.setVariableValueInObject(mojo, "outputDirectory", new File("target/test-classes/META-INF/services"));
         ReflectionUtils.setVariableValueInObject(mojo, "failOnMissingServiceClass", false);
         mojo.execute();
 
@@ -150,6 +155,7 @@ public class ServiceloaderMojoTest {
         ReflectionUtils.setVariableValueInObject(mojo, "services", new String[] { "com.baz.MissingService" });
         ReflectionUtils.setVariableValueInObject(mojo, "compileClasspath", Collections.<String>emptyList());
         ReflectionUtils.setVariableValueInObject(mojo, "classFolder", new File("target/test-classes"));
+        ReflectionUtils.setVariableValueInObject(mojo, "outputDirectory", new File("target/test-classes/META-INF/services"));
         ReflectionUtils.setVariableValueInObject(mojo, "failOnMissingServiceClass", true);
         mojo.execute();
     }
