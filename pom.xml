@@ -230,6 +230,7 @@
                         <exclude>**/*.md</exclude>
                         <exclude>**/.gitignore</exclude>
                         <exclude>**/.idea/**</exclude>
+                        <exclude>.github/**</exclude>
                     </excludes>
                     <mapping>
                         <java>SLASHSTAR_STYLE</java>
