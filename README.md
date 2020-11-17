@@ -123,6 +123,8 @@ A example project is provided and can be run like this:
 
 see http://central.sonatype.org/pages/apache-maven.html#performing-a-release-deployment-with-the-maven-release-plugin
 
+*Note: do `export GPG_TTY=$(tty)` first if you have `gpg: signing failed: Inappropriate ioctl for device` errors*
+
 ```
 mvn -P release release:clean release:prepare
 mvn -P release release:perform
