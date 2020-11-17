@@ -52,7 +52,8 @@ import org.sonatype.plexus.build.incremental.BuildContext;
         name = "generate",
         defaultPhase = LifecyclePhase.COMPILE,
         requiresDependencyResolution = ResolutionScope.COMPILE,
-        requiresProject = true)
+        requiresProject = true,
+        threadSafe = true)
 public class ServiceloaderMojo extends AbstractMojo {
 
 
@@ -87,13 +88,13 @@ public class ServiceloaderMojo extends AbstractMojo {
      */
     @Parameter
     private String[] services;
-    
+
     @Parameter
     private String[] includes;
-    
+
     @Parameter
     private String[] excludes;
-    
+
     @Parameter(defaultValue ="true")
     private boolean failOnMissingServiceClass;
 
@@ -234,7 +235,7 @@ public class ServiceloaderMojo extends AbstractMojo {
                         && Modifier.isPublic(mods)) {
                     for (Class<?> interfaceCls : interfaceClasses) {
                         if (!interfaceCls.equals(cls) && interfaceCls.isAssignableFrom(cls)) {
-                            
+
                             // if the includes section isn't empty, we need to respect the choice and only include the items that are shown there.
                             if (includes == null || includes.length == 0) {
                                 serviceImplementations.get(interfaceCls.getName()).add(className);
@@ -246,7 +247,7 @@ public class ServiceloaderMojo extends AbstractMojo {
                                     }
                                 }
                             }
-                            
+
                         }
                     }
                 }
@@ -255,9 +256,9 @@ public class ServiceloaderMojo extends AbstractMojo {
             } catch (NoClassDefFoundError e2) {
                 getLog().warn(e2);
             }
-            
+
         }
-        
+
         // in the next iteration we start to process with the excludes
         if (excludes != null && excludes.length != 0) {
             Set<Entry<String,List<String>>> entrySet = serviceImplementations.entrySet();
@@ -265,7 +266,7 @@ public class ServiceloaderMojo extends AbstractMojo {
             {
                 classNames = entry.getValue();
                 ListIterator<String> classNamesIter = classNames.listIterator();
-                
+
                 while ( classNamesIter.hasNext())
                 {
                     String className = classNamesIter.next();
