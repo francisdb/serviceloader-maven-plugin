@@ -253,50 +253,19 @@
                 </dependencies>
                 <!-- mvn license:format to add headers -->
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <source>8</source>
+                </configuration>
+            </plugin>
         </plugins>
-        <pluginManagement>
-            <plugins>
-                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-                <plugin>
-                    <groupId>org.eclipse.m2e</groupId>
-                    <artifactId>lifecycle-mapping</artifactId>
-                    <version>1.0.0</version>
-                    <configuration>
-                        <lifecycleMappingMetadata>
-                            <pluginExecutions>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>
-                                            org.apache.maven.plugins
-                                        </groupId>
-                                        <artifactId>
-                                            maven-plugin-plugin
-                                        </artifactId>
-                                        <versionRange>
-                                            [3.2,)
-                                        </versionRange>
-                                        <goals>
-                                            <goal>descriptor</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <ignore />
-                                    </action>
-                                </pluginExecution>
-                            </pluginExecutions>
-                        </lifecycleMappingMetadata>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
     </build>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>8</maven.compiler.source>
-        <additionalparam>-Xdoclint:none</additionalparam>
-        <!-- currently fails with "javadoc: error - The code being documented uses modules but the packages defined in https://docs.oracle.com/javase/8/docs/api/
-  are in the unnamed module." -->
-        <maven.javadoc.skip>true</maven.javadoc.skip>
     </properties>
 </project>
