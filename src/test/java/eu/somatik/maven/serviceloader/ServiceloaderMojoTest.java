@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Francis De Brabandere <info@somatik.eu>
+ * Copyright (C) 2021 Francis De Brabandere <info@somatik.eu>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,6 @@
  */
 package eu.somatik.maven.serviceloader;
 
-
-import com.google.common.collect.Sets;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.ReflectionUtils;
@@ -26,10 +24,7 @@ import org.sonatype.plexus.build.incremental.DefaultBuildContext;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -106,8 +101,8 @@ public class ServiceloaderMojoTest {
         File serviceFile = new File("target/test-classes/META-INF/services/com.foo.AbstractFoo");
 
         String serviceFileContents = FileUtils.fileRead(serviceFile);
-        Set<String> classNames = Sets.newHashSet(serviceFileContents.trim().split("\n"));
-        assertEquals(Sets.newHashSet("com.foo.FooImpl", "com.foo.FooImpl2"), classNames);
+        Set<String> classNames = new HashSet<>(Arrays.asList(serviceFileContents.trim().split("\n")));
+        assertEquals(new HashSet<>(Arrays.asList("com.foo.FooImpl", "com.foo.FooImpl2")), classNames);
     }
 
     /**
@@ -127,8 +122,8 @@ public class ServiceloaderMojoTest {
         File serviceFile = new File("target/test-classes/META-INF/services/com.baz.Baz");
 
         String serviceFileContents = FileUtils.fileRead(serviceFile);
-        Set<String> classNames = Sets.newHashSet(serviceFileContents.trim().split("\n"));
-        assertEquals(Sets.newHashSet("com.baz.BazExt", "com.baz.BazExt2"), classNames);
+        Set<String> classNames = new HashSet<>(Arrays.asList(serviceFileContents.trim().split("\n")));
+        assertEquals(new HashSet<>(Arrays.asList("com.baz.BazExt", "com.baz.BazExt2")), classNames);
     }
 
     @Test
