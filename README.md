@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/francisdb/serviceloader-maven-plugin.svg?branch=master)](https://travis-ci.org/francisdb/serviceloader-maven-plugin)
+[![Build status](https://github.com/francisdb/serviceloader-maven-plugin/workflows/Java%20CI%20with%20Maven/badge.svg)](https://github.com/francisdb/serviceloader-maven-plugin/actions)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/eu.somatik.serviceloader-maven-plugin/serviceloader-maven-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/eu.somatik.serviceloader-maven-plugin/serviceloader-maven-plugin)
 
 This maven plugin generates services files for the ServiceLoader introduced in Java 6 :
