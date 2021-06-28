@@ -299,6 +299,7 @@ public class ServiceloaderMojo extends AbstractMojo {
         final DirectoryScanner directoryScanner = new DirectoryScanner();
         directoryScanner.setBasedir(classFolder);
         directoryScanner.setIncludes(new String[] { "**" + File.separator + "*" + extension });
+        directoryScanner.setExcludes(new String[] { "**" + File.separator + "module-info.class" });
         directoryScanner.scan();
         String[] files = directoryScanner.getIncludedFiles();
 
