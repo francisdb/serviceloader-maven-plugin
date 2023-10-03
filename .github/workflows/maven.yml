@@ -19,7 +19,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }} ${{ matrix.java }}
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         # get full history for the license plugin
         fetch-depth: 0
