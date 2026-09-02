@@ -1,5 +1,11 @@
 [![Build status](https://github.com/francisdb/serviceloader-maven-plugin/workflows/Java%20CI%20with%20Maven/badge.svg)](https://github.com/francisdb/serviceloader-maven-plugin/actions)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/eu.somatik.serviceloader-maven-plugin/serviceloader-maven-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/eu.somatik.serviceloader-maven-plugin/serviceloader-maven-plugin)
+[![Maven Central](https://img.shields.io/maven-central/v/eu.somatik.serviceloader-maven-plugin/serviceloader-maven-plugin.svg)](https://central.sonatype.com/artifact/eu.somatik.serviceloader-maven-plugin/serviceloader-maven-plugin)
+
+> **This project is archived.**
+>
+> Version 1.4.0 is the final release. It keeps working and remains available on Maven Central,
+> but no further updates will be made. If you need changes, please fork the repository.
+> An annotation-based alternative is [Google AutoService](https://github.com/google/auto/tree/main/service).
 
 This maven plugin generates services files for the ServiceLoader introduced in Java 6 :
 https://docs.oracle.com/javase/9/docs/api/java/util/ServiceLoader.html
@@ -13,7 +19,7 @@ for example:
     <plugin>
       <groupId>eu.somatik.serviceloader-maven-plugin</groupId>
       <artifactId>serviceloader-maven-plugin</artifactId>
-      <version>1.3.1</version>
+      <version>1.4.0</version>
       <configuration>
         <services>
           <param>com.foo.Dictionary</param>
@@ -50,7 +56,7 @@ for example:
     <plugin>
       <groupId>eu.somatik.serviceloader-maven-plugin</groupId>
       <artifactId>serviceloader-maven-plugin</artifactId>
-      <version>1.3.1</version>
+      <version>1.4.0</version>
       <configuration>
         <services>
           <param>com.foo.Dictionary</param>
@@ -86,7 +92,7 @@ for example:
     <plugin>
       <groupId>eu.somatik.serviceloader-maven-plugin</groupId>
       <artifactId>serviceloader-maven-plugin</artifactId>
-      <version>1.3.1</version>
+      <version>1.4.0</version>
       <configuration>
       	<failOnMissingServiceClass>false</failOnMissingServiceClass>
         <services>
